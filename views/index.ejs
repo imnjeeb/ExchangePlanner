@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include partials/head %>
+</head>
+<body>
+<section id="container">
+  <!-- Start of Main Content -->
+  <section id="main-content">
+    <section class="wrapper">
+
+      <div class="row no-gutter">
+        <div class="col-lg-12 col-md-12">
+
+          <!-- Start of Map -->
+          <div class="row map-gutter">
+            <div class="col-lg-12">
+              <div class="panel">
+                <div class="panel-footer">Dashboards
+                  <span id="wsConnect" class="pull-right"> </span>
+                </div>
+                <!-- list-->
+                <div class="col-lg-3 col-md-4">
+                  <div class="pad box-pane-left bg-green" style="min-height: 180px">
+                    <header class="tab-bg-primary">
+                      <h4>Filter By</h4>
+                    </header>
+
+                    <!--filter form-->
+                    <div>
+                      <!--search state-->
+                      <label for="filter-state">State:</label>
+                      <select id="filter-state" placeholder="Search state...">
+                        <option value="">Select a state...</option>
+                      </select>
+                      <!--end of search state-->
+
+                      <!--search type-->
+                      <label for="filter-type">Type:</label>
+                      <select id="filter-type" placeholder="Search type..."></select>
+                      <!--end of search type-->
+
+                      <!--search group-->
+                      <label for="filter-group">Group:</label>
+                      <select id="filter-group" placeholder="Search group..."></select>
+                      <!--end of search group-->
+
+                      <!--filter by radius-->
+                      <!--<label for="filter-group" style="margin-top: 5px">Radius:</label>-->
+                      <!--<input id="filter-radius" type="number" class="radius-input pull-right" step="1" placeholder="Insert radius..." />-->
+                      <!--end of filter by radius-->
+
+                      <div id="radius-div" hidden>
+                        <h5 class="pull-left"><strong>Radius</strong></h5>
+                        <h5 class="pull-right" id="group-radius">-</h5>
+                      </div>
+
+                      <div class="clearfix"></div>
+                      <!--button trigger-->
+                      <button id="filter-data-btn" class="btn btn-success btn-block">
+                        <span id="to_filter_1">Filter </span>
+                        <span id="to_reset_1">Reset </span>
+                        Data
+                      </button>
+
+                    </div>
+                    <!--end of filter form-->
+                  </div>
+                </div>
+                <!--map-->
+                <div class="col-lg-9 col-md-8">
+                  <div id="map-wrapper">
+                    <div id="map" class="panel-body-map"></div>
+                    <div id="group-display-container" class="group-block-right hide-group" hidden>
+                      <div class="grp-btn-container">
+                        <a class="btn btn-default" id="new-group" href="#">
+                          <i class="fa fa-asterisk"></i> New Group</a>
+                        <a class="btn btn-default" id="add-to-group" href="#">
+                          <i class="fa fa-plus"></i> Add to Group</a>
+                      </div>
+
+                      <div class="grp-form-container">
+                        <!--marker count-->
+                        <label for="marker-count" style="margin-top: 5px;color: #1a2732">Marker Count</label>
+                        <h5 class="pull-right" style="margin-top: 5px;color: #1a2732;padding-right: 20px;" id="marker-count">0</h5>
+                      </div>
+
+                      <div id="group-form-container" class="grp-form-container show-form-container">
+                        <div class="clearfix"></div>
+                        <!--new group form-->
+                        <form class="form-horizontal col-lg-12" id="formNewGroup" role="form" method="post" action="">
+                          <!--group name-->
+                          <div class="form-group">
+                            <label for="group-name-new" class="col-sm-4 control-label" style="color: #1a2732">Name: <span class="required">*</span></label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="group-name-new" name="group-name-new" placeholder="Type group name..." required>
+                            </div>
+                          </div>
+                          <!--end of group name-->
+
+                          <!--group radius-->
+                          <div class="form-group">
+                            <label for="group-radius-new" class="col-sm-4 control-label" style="color: #1a2732">Radius: <span class="required">*</span></label>
+                            <div class="col-sm-8">
+                              <input id="group-radius-new" name="group-radius-new" type="number" class="form-control" step="1" placeholder="Insert radius..." required>
+                            </div>
+                          </div>
+                          <!--end of group radius-->
+                        </form>
+                        <!--end of new group form-->
+
+                        <!--new group form-->
+                        <form class="form-horizontal col-lg-12" id="formAddToGroup" role="form" method="post" action="">
+                          <!--group name-->
+                          <div class="form-group">
+                            <label for="group-name-addTo" class="col-sm-4 control-label" style="color: #1a2732">Name: <span class="required">*</span></label>
+                            <div class="col-sm-8">
+                              <select id="group-name-addTo" name="group-name-addTo" placeholder="Select group..." ></select>
+                            </div>
+                          </div>
+                          <!--end of group name-->
+
+                          <!--group radius-->
+                          <div class="form-group">
+                            <label for="group-radius-addTo" class="col-sm-4 control-label" style="color: #1a2732">Radius: </label>
+                            <div class="col-sm-8">
+                              <input id="group-radius-addTo" name="group-radius-addTo" type="number" class="form-control" step="1" placeholder="Insert radius..." readonly>
+                            </div>
+                          </div>
+                          <!--end of group radius-->
+                        </form>
+                        <!--end of new group form-->
+
+                        <button class="btn btn-primary submit-container" id="confirm-group" href="#"> Submit</button>
+                      </div>
+                    </div>
+                    <div id="button-wrapper-right">
+                      <button class="btn btn-primary" id="group-markers-btn">
+                        Group Markers
+                      </button>
+                    </div>
+                    <div id="button-wrapper">
+                      <button class="btn btn-primary" id="map-reset" hidden>
+                        <i class="fa fa-map-o" aria-hidden="true"></i>
+                        <span class="sr-only">Reset view</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!--end of map-->
+              </div>
+            </div>
+          </div>
+          <!-- End of Map -->
+          <!--alerts datatable-->
+          <div class="row alert_panel">
+            <div class="col-lg-12">
+              <div class="panel">
+                <div class="panel-footer">Exchange List Monitor</div>
+                <div id="alert_view" class="panel-body">
+                  <table id="tower-data-list" class="row-border pretty"
+                         cellpadding="5" cellspacing="0" border="0" >
+                    <thead>
+                    <tr>
+                      <th class="no-sort">#</th>
+                      <th>Exchange Name</th>
+                      <th class="text text-left">State</th>
+                      <th>Group</th>
+                      <th>Latitude/Longitude</th>
+                      <th>Radius</th>
+                      <th>EXCH_ABB</th>
+                    </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+  </section>
+  <!-- End of main content -->
+</section>
+<!-- Google Map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWUMinfvGZQYP3Ow_h71CnCqYaEOrvJj0"
+></script>
+<script>
+  var serverUrl = '<%= serverUrl %>';
+
+  var table;
+  var exchangeArray = [], tempGroup = [], filtersObj = {};
+  var isCreatingTheGroup = false, isNewGroup = null;
+  var map, basemap, markers = [], groupMarkers = [], geocoder;
+  var $select_state, $select_type, $select_group, $add_group_select_group;
+  var selected_state, selected_type, selected_group, selected_add_group;
+  var btnLoaded = true;
+
+  var MarkerIcon = L.Icon.extend({
+    options: {
+      shadowUrl: './images/markers/marker-shadow.png',
+      iconSize:     [32, 36], // size of icon
+      shadowSize:   [51, 36], // size of the shadow
+      iconAnchor:   [17, 35], // point of the icon which will correspond to marker's location
+      shadowAnchor: [18, 34], // the same for the shadow
+      popupAnchor:  [-3, -38] // point from which the popup should open relative to the iconAnchor
+    }
+  });
+  var icon = {
+    tower: new MarkerIcon({iconUrl: './images/markers/radio-station-2.png'}),
+    towerBlue: new MarkerIcon({iconUrl: './images/markers/radio-station-2-blue.png'})
+  };
+
+  function initMap() {
+    var zoom = 11;
+    geocoder = new google.maps.Geocoder();
+    var lat = 1.413676, lng = 103.5966996,
+            latLng = new L.LatLng(lat, lng);
+
+    $('#map-reset').hide();
+    map = L.map('map').setView([lat, lng], zoom);
+    basemap = L.tileLayer('https://api.mapbox.com/styles/v1/imnjeeb/ciq1nl5el0032dbm4t5agojqe/tiles/256/{z}/{x}/{y}?access_token=' + '<%= access_token %>', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; ' +
+      'Imagery © <a href="http://mapbox.com">Mapbox</a> ' +
+      'Icons © <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>',
+      id: 'mapbox.streets'
+    }).addTo(map);
+
+    // on zoom, show button
+    map.on('zoomend', function(e) {
+      if (map.getZoom() > 13) {
+        $('#map-reset').show();
+      } else if (map.getZoom() == 11) {
+        $('#map-reset').hide();
+      }
+    });
+
+    // on boxzoomend
+    map.on("boxzoomend", function(e) {
+      console.log(e.boxZoomBounds);
+      for (var i = 0; i < markers.length; i++) {
+
+//        if (e.boxZoomBounds.contains(markers[i])) {
+//          console.log(markers[i]);
+//        }
+      }
+    });
+  }
+
+  function initTable() {
+    table = $('#tower-data-list').DataTable({
+      "columnDefs" : [
+        { "targets": 'no-sort', "orderable" : false, "width": "2%"},
+        { "visible": false, "targets": 6 }
+      ],
+      select: {
+        style: 'single'
+      },
+      "iDisplayLength":5,
+      "pagingType": "simple_numbers",
+      "bLengthChange": false,
+      "bInfo": true
+    });
+
+    table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+      } );
+    } ).draw();
+  }
+
+  function initGroupBlock() {
+    var millis = 220;
+    $('.group-block-right').hide().delay(millis).show();
+    /** display:the whole white area consist of forms and buttons **/
+    $('#group-display-container').hide();
+    /** choose button:contains buttons 'New Group' and 'Add To Group' **/
+    $('#group-choose-button-container').hide();
+    /** form:contains form either the New or Add To **/
+    $('#group-form-container').hide();
+  }
+
+  function toggleGroupBlock() {
+    var grp = $('.group-block-right'),
+        grpDisplayContainer = $('#group-display-container'),
+        grpBtnContainer = $('.grp-btn-container'),
+        grpFormContainer = $('#group-form-container');
+    var delayAt = 300, showAt = 200, hideAt = 400;
+
+    if (grp.hasClass('hide-group')) {
+      /** show whole box display **/
+      grp.removeClass('hide-group');
+      grpDisplayContainer.show(showAt);
+      $('#group-markers-btn').hide();
+
+      /** show button selection 'New Group' and 'Add To Group' **/
+      grpBtnContainer.removeClass('hide-btn-container');
+      grpBtnContainer.show();
+    } else {
+      /** hide whole box display **/
+      grp.addClass('hide-group');
+      $('#group-markers-btn').hide().delay(delayAt).show(showAt);
+      grpDisplayContainer.hide(hideAt);
+
+      /** hide button selection 'New Group' and 'Add To Group' **/
+      grpBtnContainer.addClass('hide-btn-container');
+      grpBtnContainer.hide();
+
+      /** hide form **/
+      grpFormContainer.hide(50);
+      grpFormContainer.removeClass('show-form-container');
+    }
+  }
+
+  function toggleGroupButtonContainer(formId) {
+    var grpBtnContainer = $('.grp-btn-container'),
+        grpFormContainer = $('#group-form-container');
+    var delayAt = 1000, showAt = 100, hideAt = 200;
+    if (grpBtnContainer.hasClass('hide-btn-container')) {
+//      $('#group-markers-btn').hide().delay(delayAt).show(showAt);
+      /** hide form **/
+      grpFormContainer.hide(hideAt);
+      grpFormContainer.removeClass('show-form-container');
+      /** show button **/
+      grpBtnContainer.removeClass('hide-btn-container');
+      grpBtnContainer.hide().delay(delayAt).show();
+
+    } else {
+      /** hide button **/
+      grpBtnContainer.addClass('hide-btn-container');
+      grpBtnContainer.show().delay(delayAt).hide();
+
+      /** show specific form only **/
+      $('#formNewGroup,#formAddToGroup').hide();
+      formId.show();
+      /** show form **/
+      grpFormContainer.show(showAt);
+      grpFormContainer.addClass('show-form-container');
+    }
+  }
+
+  function initFilterForm() {
+    $("#radius-div").hide();
+    $select_state = $('#filter-state').selectize({
+      persist: false,
+      sortField: {
+        field: 'text',
+        direction: 'asc'
+      },
+      valueField: 'id',
+      labelField: 'title',
+      searchField: ['title'],
+      onChange: function(value) {
+        selected_state = value;
+      }
+    });
+
+    $select_type = $('#filter-type').selectize({
+      persist: false,
+      sortField: {
+        field: 'text',
+        direction: 'asc'
+      },
+      valueField: 'id',
+      labelField: 'title',
+      searchField: 'title',
+      onChange: function(value) {
+        selected_type = value;
+      }
+    });
+    $select_group = $('#filter-group').selectize({
+      persist: false,
+      sortField: {
+        field: 'text',
+        direction: 'asc'
+      },
+      valueField: 'id',
+      labelField: 'title',
+      searchField: 'title',
+      onChange: function(value) {
+        selected_group = value;
+      }
+    });
+
+    /** add new group **/
+    $add_group_select_group = $('#group-name-addTo').selectize({
+      persist: false,
+      sortField: {
+        field: 'text',
+        direction: 'asc'
+      },
+      valueField: 'id',
+      labelField: 'title',
+      searchField: 'title',
+      onChange: function(value) {
+        selected_add_group = value;
+        if (typeof filtersObj['GROUP'] != 'undefined') {
+          for (var i in filtersObj['GROUP']) {
+            if (value == filtersObj['GROUP'][i].id) {
+              $('#group-radius-addTo').val(parseInt(filtersObj['GROUP'][i]['radius'],10) || 0);
+              break;
+            }
+          }
+
+        }
+      }
+    });
+  }
+
+  function initFilterData() {
+    console.log("filter data", exchangeArray.length);
+    if (exchangeArray.length > 0) {
+
+      var sTempType = [], sTempState = [], sTempGroup = [];
+      for (var i in exchangeArray) {
+        var exType = exchangeArray[i].TYPE,
+                exState = exchangeArray[i].STATE,
+                group = exchangeArray[i].GROUP_ID,
+                radius = exchangeArray[i].radius;
+
+        // add filters
+        sTempType.push({"id": trimString(exType), "title": exType});
+        sTempState.push({"id": trimString(exState), "title": exState});
+        sTempGroup.push({"id": trimString(group), "title": group, "radius": radius});
+      }
+
+      createFilters('TYPE', ArrObjNoDupe(sTempType));
+      createFilters('STATE', ArrObjNoDupe(sTempState));
+      createFilters('GROUP', ArrObjNoDupe(sTempGroup));
+    }
+  }
+
+  function createFilters(params, value) {
+    filtersObj[params] = value;
+    console.log("createFilters", params,filtersObj[params].length);
+
+    switch (params) {
+      case 'TYPE':
+        for (var i in value) {
+          $select_type[0].selectize.addOption(value[i]);
+        }
+        break;
+      case 'STATE':
+        for (var i in value) {
+          $select_state[0].selectize.addOption(value[i]);
+        }
+        break;
+      case 'GROUP':
+        for (var i in value) {
+          $select_group[0].selectize.addOption(value[i]);
+        }
+        break;
+    }
+
+//    console.log("createFilters", params, value);
+  }
+
+  function initPageData() {
+    $.ajax({
+      url: '/api/all',
+      type: 'GET',
+      beforeSend: function () {
+        $(".modal").show();
+      },
+      complete: function () {
+        $(".modal").hide();
+      },
+      error: function(d) {
+        console.log("error",d);
+      }
+    }).done(function (d) {
+      console.log("exchanges",d);
+      if (d.statusCode == 200) {
+        var data = d.Data;
+        if (data.length > 0) {
+          exchangeArray = data;
+
+          populateExchangeTable(data);
+        }
+        initMarkersPageData(exchangeArray);
+        initFilterData();
+      }
+    });
+  }
+
+  function initMarkersPageData(dataArray) {
+    groupMarkers.length = 0;
+//    console.log("start of  groupMarkers value of",groupMarkers.length);
+    console.log(dataArray[0].EXCH_ABB);
+    if (dataArray.length > 0) {
+      for (var i in dataArray) {
+        var id = dataArray[i]._id,//EXCH_ABB,
+                latLng = new L.LatLng(dataArray[i].LATITUDE, dataArray[i].LONGITUDE),
+                group = dataArray[i].GROUP_ID,
+                radius = dataArray[i].radius,
+                location = dataArray[i].EXCHANGE_NAME;
+
+        createMarker(latLng, id, group, radius, location)
+      }
+      markers = ArrObjNoDupe(markers);
+    }
+  }
+
+  function createMarker(nLatLng, id, group, radius, location) {
+    var radii = parseFloat(radius) / 1000;
+    radii = intToFloat(radii, 2);
+    var customPopup = '<strong>'+location+'</strong><br>Group:<span>'+group+'</span>' +
+            '<br>Radius:<span>'+radii+' km</span>';
+    var customOptions =
+    {
+      'maxWidth': '150',
+      'className' : 'custom'
+    }
+    var marker = L.marker(nLatLng, {icon: icon.tower}).bindPopup(customPopup,customOptions)
+            .on('click', function (e) {
+              if (isCreatingTheGroup) {
+                var tempObj = {"id": id, "marker": marker, "group": group || "default", "radius": radius};
+                tempGroup.push(tempObj);
+                tempGroup = ArrObjNoDupe(tempGroup);
+                $('#marker-count').text(tempGroup.length);
+                e.target.setIcon(icon.towerBlue);
+                console.log(tempObj);
+              } else {
+                map.setView(nLatLng, 18);
+//            geocodePosition(nLatLng);
+              }
+            });
+    var circle_radius = L.circle(nLatLng, radius,{
+      fillColor:'#1d5492',
+      fillOpacity:'0.2',
+      stroke:false,
+      clickable:false
+    });
+
+    var markerGroup = L.layerGroup([marker, circle_radius]);
+    map.addLayer(markerGroup);
+
+    var obj = {"id": id, "marker": marker, "markerGroup": markerGroup, "group": group || "default", "radius": radius,
+      "LatLng": nLatLng, "location": location};
+
+    groupMarkers.push(marker);
+    markers.push(obj);
+  }
+
+
+  function searchLocation(address, xy) {
+    var trimAddress = address.trim();
+    trimAddress = trimAddress.replace(/\s+/g, ' ');
+    console.log(trimAddress);
+
+    GMaps.geocode({
+      address: trimAddress,
+      callback: function (results, status) {
+//                console.log(JSON.stringify(results));
+        if (status == 'OK') {
+          var eLatLng = results[0].geometry.location;
+          var latLng = new L.LatLng(eLatLng.lat(), eLatLng.lng());
+//          createMarker(latLng, mIcon, xy);
+        }
+      }
+    });
+  }
+
+  function geocodePosition(pos) {
+    var ePos = objToLatLng(pos.lat, pos.lng);
+    geocoder.geocode({
+      latLng: ePos
+    }, function (responses) {
+      if (responses && responses.length > 0) {
+        updateMarkerAddress(responses[0].formatted_address);
+      } else {
+        updateMarkerAddress('Cannot determine address at this location.');
+      }
+    });
+  }
+
+  function objToLatLng(lat, lng) {
+    return new google.maps.LatLng(lat, lng);
+  }
+
+  function updateMarkerAddress(str) {
+    $('#client-loc').text(' ' + str);
+  }
+
+  function prepareUpdateGroup() {
+    console.log("proceedCreateGroup",isNewGroup);
+    if (isNewGroup == null || markers.length == 0)
+      return ;
+
+    if (isNewGroup) {
+      var newGroupName = $('#group-name-new').val(),
+          newGroupRadius = $('#group-radius-new').val();
+
+      for (var i in markers) {
+        for (var j in tempGroup) {
+          if (markers[i].id == tempGroup[j].id) {
+            var marker = markers[i].markerGroup;
+
+            map.removeLayer(marker);
+            markers.splice(i, 1);
+            createMarker(markers[i].LatLng, markers[i].id, newGroupName, newGroupRadius, markers[i].location);
+          }
+        }
+      }
+    } else {
+      /** this data is from selectize onChange **/
+      var groupName = selected_add_group;
+
+      for (var i in markers) {
+        for (var j in tempGroup) {
+          if (markers[i].id == tempGroup[j].id) {
+            var marker = markers[i].markerGroup;
+
+            map.removeLayer(marker);
+            markers.splice(i, 1);
+            createMarker(markers[i].LatLng, markers[i].id, groupName, markers[i].radius, markers[i].location);
+          }
+        }
+      }
+    }
+
+  }
+
+  // On Load
+  $(function () {
+    initTable();
+    initMap();
+    initGroupBlock();
+    initFilterForm();
+
+    initPageData();
+    changeBtnLoad();
+
+    /** button for adding group **/
+    $('#group-markers-btn').on('click', function(evt) {
+      isCreatingTheGroup = true;
+      tempGroup.length = 0;
+      toggleGroupBlock();
+
+      // change cursors to create polygon?
+    });
+    /** button submit to confirm in creating group **/
+    $('#confirm-group').on('click', function(evt) {
+      isCreatingTheGroup = false;
+      prepareUpdateGroup();
+      toggleGroupBlock();
+
+      isNewGroup = null;
+    });
+
+    /** button new group **/
+    $('#new-group').on('click', function(evt) {
+      isNewGroup = true;
+      toggleGroupButtonContainer($('#formNewGroup'));
+    });
+    /** button add to group **/
+    $('#add-to-group').on('click', function(evt) {
+      isNewGroup = false;
+      if (typeof filtersObj['GROUP'] != 'undefined') {
+        $add_group_select_group[0].selectize.addOption(filtersObj['GROUP']);
+      }
+      toggleGroupButtonContainer($('#formAddToGroup'));
+    });
+
+    $('#map-reset').on('click', function(e){
+      if (btnLoaded && groupMarkers.length > 0) {
+        var markerGroup = L.featureGroup(groupMarkers);
+        map.fitBounds(markerGroup.getBounds());
+      } else {
+        map.setView(map.getCenter(), 11);
+      }
+    });
+
+    var markerRemoved = false;
+    $('#filter-data-btn').on('click', function (e) {
+      e.preventDefault();
+      btnLoaded = !btnLoaded;
+
+      if (!btnLoaded) {
+        var shouldFilter = false, params = {};
+        console.log("type",selected_type);
+        console.log("group",selected_group);
+        console.log("state",selected_state);
+        if (typeof selected_type != 'undefined' && selected_type.length> 0) {
+          shouldFilter = true;
+          params["TYPE"] = selected_type;
+        }
+
+        if (typeof selected_group != 'undefined' && selected_group.length> 0) {
+          shouldFilter = true;
+          params["GROUP_ID"]= selected_group;
+        }
+
+        if (typeof selected_state != 'undefined' && selected_state.length> 0) {
+          shouldFilter = true;
+          params["STATE"]= selected_state;
+        }
+        console.log(params);
+
+        if (shouldFilter) {
+          $.ajax({
+            url: '/api/filter-by',
+            type: 'GET',
+            data:params,
+            beforeSend: function () {
+              $(".modal").show();
+            },
+            complete: function () {
+              $(".modal").hide();
+            },
+            error: function(d) {
+              console.log("error",d);
+            }
+          }).done(function (d) {
+            if (d.statusCode == 200) {
+              var data = d.Data;
+              if (data.length > 0) {
+                console.log("filters",data[0]);
+
+                if (typeof selected_group != 'undefined' && selected_group.length> 0) {
+                  $("#radius-div").show();
+                  var radii = parseFloat(data[0].radius) / 1000;
+                  radii = intToFloat(radii, 2);
+                  $("#group-radius").text(radii+" km");
+                }
+
+                map.eachLayer(function (layer) {
+                  if ((layer == basemap)) {
+                    return true;
+                  }
+                  markerRemoved = true;
+                  map.removeLayer(layer);
+                });
+
+                initMarkersPageData(data);
+                populateExchangeTable(data);
+
+                if (groupMarkers.length > 0) {
+                  var markerGroup = L.featureGroup(groupMarkers);
+                  map.fitBounds(markerGroup.getBounds());
+                }
+              }
+            }
+          });
+        }
+      } else {
+        console.log("reset:markerRemoved", markerRemoved);
+        if (markerRemoved) {
+          console.log("isRemoved");
+          map.eachLayer(function (layer) {
+            if ((layer == basemap)) {
+              return true;
+            }
+            map.removeLayer(layer);
+          });
+          initMarkersPageData(exchangeArray);
+          markerRemoved = false;
+
+          populateExchangeTable(exchangeArray);
+        }
+
+        $("#radius-div").hide();
+        $select_type[0].selectize.clear();
+        $select_state[0].selectize.clear();
+        $select_group[0].selectize.clear();
+      }
+
+      changeBtnLoad();
+    });
+
+  });
+
+  function populateExchangeTable(dataArray) {
+    console.log("populateTable",dataArray[0]);
+    table.clear().draw();
+    if (dataArray.length > 0) {
+      for (var i in dataArray) {
+        // populate table
+
+        table.row.add([
+          i,
+          dataArray[i].EXCHANGE_NAME,
+          dataArray[i].STATE,
+          dataArray[i].GROUP_ID,
+          dataArray[i].LATITUDE + ", " + exchangeArray[i].LONGITUDE,
+          dataArray[i].radius+" m",
+          dataArray[i].EXCH_ABB
+        ]).draw(false);
+      }
+
+    }
+  }
+
+  function changeBtnLoad() {
+    var $to_filter = $('[id^="to_filter"]'),
+            $to_reset = $('[id^="to_reset"]');
+    $to_filter.toggleClass('tb_hidden', !btnLoaded);
+    $to_filter.toggleClass('tb_visible', btnLoaded);
+    $to_reset.toggleClass('tb_hidden', btnLoaded);
+    $to_reset.toggleClass('tb_visible', !btnLoaded);
+    $('#filter-data-btn').toggleClass('btn-danger', !btnLoaded);
+  }
+
+  /**
+   * @return {boolean}
+   */
+  function IsJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  function extend(obj, src) {
+    for (var key in src) {
+      if (src.hasOwnProperty(key)) obj[key] = src[key];
+    }
+    return obj;
+  }
+
+  function isEmpty(obj) {
+    for(var prop in obj) {
+      if(obj.hasOwnProperty(prop))
+        return false;
+    }
+
+    return true;
+  }
+
+  /**  avoid duplicates in array **/
+  function ArrObjNoDupe(a) {
+    var temp = {};
+    for (var i = 0; i < a.length; i++)
+      temp[a[i]['id']] = a[i];
+    var r = [];
+    for (var k in temp)
+      r.push(temp[k]);
+    return r;
+  }
+
+  function ArrNoDupe(a) {
+    var temp = {};
+    for (var i = 0; i < a.length; i++)
+      temp[a[i]] = true;
+    var r = [];
+    for (var k in temp)
+      r.push(k);
+    return r;
+  }
+
+  function findDeselectedItem(CurrentArray, PreviousArray) {
+
+    var CurrentArrSize = CurrentArray.length;
+    var PreviousArrSize = PreviousArray.length;
+    var accMissing = [];
+
+    // loop through previous array
+    for(var j = 0; j < PreviousArrSize; j++) {
+
+      // look for same thing in new array
+      if (CurrentArray.indexOf(PreviousArray[j]) == -1)
+        accMissing.push(PreviousArray[j])
+//        return PreviousArray[j];
+    }
+    return accMissing;
+
+//    return null;
+
+  }
+
+  function trimString(str) {
+    var trimStr = str.trim();
+    return trimStr.replace(/\s+/g, ' ');
+  }
+
+  function intToFloat(num, decPlaces) { return num.toFixed(decPlaces); }
+</script>
+<style>
+  #map-wrapper {
+    width: 100%;
+    height: 420px;
+    position: relative;
+  }
+
+  #map {
+    margin: 0;
+    width: auto;
+    height: 100%;
+  }
+
+  /* css to customize Leaflet default styles  */
+  .custom .leaflet-popup-tip,
+  .custom .leaflet-popup-content-wrapper {
+    background: whitesmoke;
+    color: #000;
+  }
+
+  #button-wrapper-right {
+    position: absolute;
+    padding-right: 10px;
+    top: 10px;
+    right:0;
+    color: #f8f8f2;
+  }
+
+  #button-wrapper {
+    position: absolute;
+    padding-left: 10px;
+    bottom: 10px;
+    width: 100%;
+    color: #f8f8f2;
+  }
+
+  .group-block-right {
+    position: absolute;
+    top: 0;
+    right:0;
+    height: 100%;
+    width: 320px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: transform 0.5s ease-out;
+  }
+
+  .hide-group {
+    transform:translateX( +3px);
+  }
+
+  .group-block-right > .grp-btn-container {
+    position: relative;
+    top: 0;
+    text-align:center;
+    padding: 20px 10px 10px;
+    width: 100%;
+    height: 60px;
+    transition: transform 0.5s ease-out;
+  }
+
+  .hide-btn-container {
+    transform:translateY( -60px);
+  }
+
+  .group-block-right > .grp-form-container {
+    position: relative;
+    top: 0;
+    text-align:left;
+    padding: 20px 10px 10px;
+    margin: 3px 0 3px;
+    width: 100%;
+    height: 200px;
+    transition: transform 0.5s ease-out;
+  }
+
+  .grp-form-container > .submit-container {
+    position: relative;
+    bottom: 0;
+    text-align:center;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .show-form-container {
+    transform:translateY( -150px);
+  }
+
+  #filter-data-btn {
+    margin: 25px 0 8px;
+    position: relative;
+    bottom: 0;
+  }
+
+  #radius-div {
+    margin:5px 0 2px;
+  }
+
+  .radius-input {
+    padding: 8px 5px 8px;
+    color: #000
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0.0;
+    }
+  }
+
+  .no-gutter > [class*='col-lg-'], .map-gutter > .col-lg-10 .col-md-9 {
+    padding-right: 0;
+  }
+
+  .no-gutter > .col-lg-3 {
+    padding-left: 0;
+  }
+
+  .truncate-address {
+    position: relative;
+    height: 2.4em; /* exactly two lines */
+    max-height: 1.2em;
+  }
+
+  .truncate-address:after {
+    content: '';
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 90%;
+    height: 1.2em;
+    background: linear-gradient(to right, rgba(68, 71, 90, 0), rgba(68, 71, 90, 1) 98%);
+  }
+
+  .panel-details .desc:hover .truncate-address:after {
+    background: linear-gradient(to right, rgba(98, 114, 164, 0), rgba(98, 114, 164, 1) 98%);
+  }
+
+  tr.row_selected td{background-color:#d95043 !important;}
+
+  .tb_visible {
+    display: initial;
+  }
+
+  .tb_hidden {
+    display: none;
+  }
+
+  /*loading map*/
+  .modal {
+    position: fixed;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: Black;
+    filter: alpha(opacity=70);
+    opacity: 0.6;
+    -moz-opacity: 0.8;
+  }
+
+  .center {
+    z-index: 1000;
+    margin: 300px auto;
+    padding: 10px;
+    width: 80px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    filter: alpha(opacity=50);
+    opacity: 1;
+    -moz-opacity: 1;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding : 0px;
+    margin-left: 0px;
+    display: inline;
+    border: 0px;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border: 0px;
+  }
+
+</style>
+<div class="modal" style="display: none;">
+  <div class="center">
+    <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color: #000;"></i>
+    <span class="sr-only">Loading...</span>
+    <div style="margin-top: 2px" class="clearfix"></div>
+    <!--Loading...-->
+  </div>
+</div>
+</body>
+</html>
