@@ -79,14 +79,15 @@
                           <i class="fa fa-plus"></i> Add to Group</a>
                       </div>
 
-                      <div class="grp-form-container">
+                      <div class="grp-form-container count-marker">
                         <!--marker count-->
-                        <label for="marker-count" style="margin-top: 5px;color: #1a2732">Marker Count</label>
-                        <h5 class="pull-right" style="margin-top: 5px;color: #1a2732;padding-right: 20px;" id="marker-count">0</h5>
+                        Marker Count
+                        <span class="pull-right" style="padding-right: 20px;" id="marker-count">0</span>
+                        <div class="clearfix"></div>
                       </div>
 
                       <div id="group-form-container" class="grp-form-container show-form-container">
-                        <div class="clearfix"></div>
+
                         <!--new group form-->
                         <form class="form-horizontal col-lg-12" id="formNewGroup" role="form" method="post" action="">
                           <!--group name-->
@@ -232,7 +233,7 @@
     map.on('zoomend', function(e) {
       if (map.getZoom() > 13) {
         $('#map-reset').show();
-      } else if (map.getZoom() == 11) {
+      } else if (map.getZoom() <= 11) {
         $('#map-reset').hide();
       }
     });
@@ -247,6 +248,7 @@
 //        }
       }
     });
+//    createMarker(latLng, 0, 'default', 3000, 'JB');
   }
 
   function initTable() {
@@ -506,8 +508,8 @@
   function createMarker(nLatLng, id, group, radius, location) {
     var radii = parseFloat(radius) / 1000;
     radii = intToFloat(radii, 2);
-    var customPopup = '<strong>'+location+'</strong><br>Group:<span>'+group+'</span>' +
-            '<br>Radius:<span>'+radii+' km</span>';
+    var customPopup = '<strong>'+location+'</strong><br>Group: <span> '+group+'</span>' +
+            '<br>Radius:<span> '+radii+' km</span>';
     var customOptions =
     {
       'maxWidth': '150',
@@ -596,26 +598,33 @@
       for (var i in markers) {
         for (var j in tempGroup) {
           if (markers[i].id == tempGroup[j].id) {
-            var marker = markers[i].markerGroup;
+            var marker = markers[i].markerGroup,
+                    id = markers[i].id,
+                    LatLng = markers[i].LatLng,
+                    location = markers[i].location;
 
             map.removeLayer(marker);
             markers.splice(i, 1);
-            createMarker(markers[i].LatLng, markers[i].id, newGroupName, newGroupRadius, markers[i].location);
+            createMarker(LatLng, id, newGroupName, newGroupRadius, location);
           }
         }
       }
     } else {
       /** this data is from selectize onChange **/
-      var groupName = selected_add_group;
+      var groupName = selected_add_group,
+              radius = $('#group-radius-addTo').val();
 
       for (var i in markers) {
         for (var j in tempGroup) {
           if (markers[i].id == tempGroup[j].id) {
-            var marker = markers[i].markerGroup;
+            var marker = markers[i].markerGroup,
+                    id = markers[i].id,
+                    LatLng = markers[i].LatLng,
+                    location = markers[i].location;
 
             map.removeLayer(marker);
             markers.splice(i, 1);
-            createMarker(markers[i].LatLng, markers[i].id, groupName, markers[i].radius, markers[i].location);
+            createMarker(LatLng, id, groupName, radius, location);
           }
         }
       }
@@ -913,6 +922,13 @@
     bottom: 10px;
     width: 100%;
     color: #f8f8f2;
+  }
+
+  .count-marker {
+    font-size: 1.3em;
+    font-style: oblique;
+    margin-top: 5px;
+    color: #1a2732
   }
 
   .group-block-right {
